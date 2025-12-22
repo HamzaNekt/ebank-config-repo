@@ -16,6 +16,8 @@ spring:
           uri: lb://front-api-service
           predicates:
             - Path=/api/auth/**
+          filters:
+            - RewritePath=/api/auth/(?<segment>.*), /auth/${segment}
 
         # Route vers Front-API Service protégées
         - id: front-api-protected
@@ -31,6 +33,7 @@ spring:
           predicates:
             - Path=/api/customers/**
           filters:
+            - RewritePath=/api/customers/(?<segment>.*), /customers/${segment}
             - JwtAuthenticationFilter
 
         # Route vers Account Service
@@ -39,6 +42,16 @@ spring:
           predicates:
             - Path=/api/accounts/**
           filters:
+            - RewritePath=/api/accounts/(?<segment>.*), /accounts/${segment}
+            - JwtAuthenticationFilter
+
+        # Route vers Operations
+        - id: operations-route
+          uri: lb://account-service
+          predicates:
+            - Path=/api/operations/**
+          filters:
+            - RewritePath=/api/operations/(?<segment>.*), /operations/${segment}
             - JwtAuthenticationFilter
 
 # JWT pour validation au niveau Gateway
