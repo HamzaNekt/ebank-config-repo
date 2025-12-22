@@ -1,0 +1,3 @@
+# Ne pas commiter de fichiers sensibles
+*.env
+.env.local

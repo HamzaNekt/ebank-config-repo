@@ -1,0 +1,17 @@
+# Configuration globale pour tous les microservices
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+
+# Actuator (CDC2 - Monitoring & Observability)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

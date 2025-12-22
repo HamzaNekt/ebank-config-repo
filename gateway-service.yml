@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        # Route vers Customer Service
+        - id: customer-service
+          uri: lb://customer-service
+          predicates:
+            - Path=/api/customers/**
+          filters:
+            - RewritePath=/api/customers/(?<segment>.*), /${segment}
+
+        # Route vers Account Service
+        - id: account-service
+          uri: lb://account-service
+          predicates:
+            - Path=/api/accounts/**
+          filters:
+            - RewritePath=/api/accounts/(?<segment>.*), /${segment}
+
+        # Route vers Front-API Service
+        - id: front-api-service
+          uri: lb://front-api-service
+          predicates:
+            - Path=/api/auth/**, /api/dashboard/**, /api/transfer/**
+
+# JWT pour validation au niveau Gateway
+jwt:
+  secret: ${JWT_SECRET:ebank-secret-key-very-long-and-secure-minimum-512-bits}
