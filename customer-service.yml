@@ -17,10 +17,15 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: true
-
-# Configuration email pour envoi credentials (RG_7)
-mail:
-  host: smtp.gmail.com
-  port: 587
-  username: ${MAIL_USERNAME:your-email@gmail.com}
-  password: ${MAIL_PASSWORD:your-password}
+  # Configuration email pour envoi credentials (RG_7)
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:your-email@gmail.com}
+    password: ${MAIL_PASSWORD:your-password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
