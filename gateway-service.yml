@@ -11,7 +11,15 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
-        # Route vers Customer Service
+        # Route vers Customer Service (path exact)
+        - id: customer-service-root
+          uri: lb://customer-service
+          predicates:
+            - Path=/api/customers
+          filters:
+            - RewritePath=/api/customers, /customers
+
+        # Route vers Customer Service (avec segment)
         - id: customer-service
           uri: lb://customer-service
           predicates:
