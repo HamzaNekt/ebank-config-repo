@@ -31,7 +31,7 @@ spring:
         - id: front-api-service
           uri: lb://front-api-service
           predicates:
-            - Path=/api/auth/**, /api/dashboard/**, /api/customers/**, /api/debug/**
+            - Path=/api/auth/**, /api/dashboard/**, /api/customers/**
           filters:
             - RewritePath=/api/(?<segment>.*), /${segment}
 
