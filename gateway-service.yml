@@ -11,51 +11,12 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
-        # Route vers Customer Service (path exact)
-        - id: customer-service-root
-          uri: lb://customer-service
-          predicates:
-            - Path=/api/customers
-          filters:
-            - RewritePath=/api/customers, /customers
-
-        # Route vers Customer Service (avec segment)
-        - id: customer-service
-          uri: lb://customer-service
-          predicates:
-            - Path=/api/customers/**
-          filters:
-            - RewritePath=/api/customers/(?<segment>.*), /customers/${segment}
-
-        # Route vers Account Service (path exact)
-        - id: account-service-root
-          uri: lb://account-service
-          predicates:
-            - Path=/api/accounts
-          filters:
-            - RewritePath=/api/accounts, /accounts
-
-        # Route vers Account Service (avec segment)
-        - id: account-service
-          uri: lb://account-service
-          predicates:
-            - Path=/api/accounts/**
-          filters:
-            - RewritePath=/api/accounts/(?<segment>.*), /accounts/${segment}
-
-        # Route vers Operations (Account Service)
-        - id: operations-route
-          uri: lb://account-service
-          predicates:
-            - Path=/api/operations/**
-          filters:
-            - RewritePath=/api/operations/(?<segment>.*), /operations/${segment}
-
-        # Route vers Front-API Service
+        # Route vers Front-API Service - Point d'entrée unique pour toutes les API
+        # Option 1: Tout passe par le BFF (Backend For Frontend)
         - id: front-api-service
           uri: lb://front-api-service
           predicates:
-            - Path=/api/auth/**, /api/dashboard/**
+            - Path=/api/**
           filters:
             - RewritePath=/api/(?<segment>.*), /${segment}
 
