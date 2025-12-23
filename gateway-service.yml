@@ -11,22 +11,6 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
-        # Route Auth (PUBLIC - sans JWT)
-        - id: auth-route
-          uri: lb://front-api-service
-          predicates:
-            - Path=/api/auth/**
-          filters:
-            - RewritePath=/api/auth/(?<segment>.*), /auth/${segment}
-
-        # Route vers Front-API Service protégées
-        - id: front-api-protected
-          uri: lb://front-api-service
-          predicates:
-            - Path=/api/dashboard/**,/api/operations/**
-          filters:
-            - JwtAuthenticationFilter
-
         # Route vers Customer Service
         - id: customer-service
           uri: lb://customer-service
@@ -34,7 +18,6 @@ spring:
             - Path=/api/customers/**
           filters:
             - RewritePath=/api/customers/(?<segment>.*), /customers/${segment}
-            - JwtAuthenticationFilter
 
         # Route vers Account Service
         - id: account-service
@@ -43,16 +26,14 @@ spring:
             - Path=/api/accounts/**
           filters:
             - RewritePath=/api/accounts/(?<segment>.*), /accounts/${segment}
-            - JwtAuthenticationFilter
 
-        # Route vers Operations
-        - id: operations-route
-          uri: lb://account-service
+        # Route vers Front-API Service
+        - id: front-api-service
+          uri: lb://front-api-service
           predicates:
-            - Path=/api/operations/**
+            - Path=/api/auth/**, /api/dashboard/**, /api/operations/**
           filters:
-            - RewritePath=/api/operations/(?<segment>.*), /operations/${segment}
-            - JwtAuthenticationFilter
+            - RewritePath=/api/(?<segment>.*), /${segment}
 
 # JWT pour validation au niveau Gateway
 jwt:
