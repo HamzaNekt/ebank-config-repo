@@ -27,7 +27,15 @@ spring:
           filters:
             - RewritePath=/api/customers/(?<segment>.*), /customers/${segment}
 
-        # Route vers Account Service
+        # Route vers Account Service (path exact)
+        - id: account-service-root
+          uri: lb://account-service
+          predicates:
+            - Path=/api/accounts
+          filters:
+            - RewritePath=/api/accounts, /accounts
+
+        # Route vers Account Service (avec segment)
         - id: account-service
           uri: lb://account-service
           predicates:
