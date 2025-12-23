@@ -11,6 +11,14 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
+        # Route vers Customer Service
+        - id: customer-service
+          uri: lb://customer-service
+          predicates:
+            - Path=/api/customers/**
+          filters:
+            - RewritePath=/api/customers/(?<segment>.*), /customers/${segment}
+
         # Route vers Account Service
         - id: account-service
           uri: lb://account-service
@@ -31,7 +39,7 @@ spring:
         - id: front-api-service
           uri: lb://front-api-service
           predicates:
-            - Path=/api/auth/**, /api/dashboard/**, /api/customers/**
+            - Path=/api/auth/**, /api/dashboard/**
           filters:
             - RewritePath=/api/(?<segment>.*), /${segment}
 
